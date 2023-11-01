@@ -13,6 +13,10 @@ import Employees from "./employees";
 import '../styles/screen.css';
 import Register from "./register";
 import DashboardMenu from "./dashboard-menu";
+import Clients from "./clients";
+import Products from "./products";
+import Sales from "./sales";
+import StoragePage from "./storage";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -65,6 +69,10 @@ function RootLayoutNav() {
           <Stack.Screen name="employees" component={Employees} />
           <Stack.Screen name="register" component={Register} />
           <Stack.Screen name="dashboard-menu" component={DashboardMenu} />
+          <Stack.Screen name="clients" component={Clients} />
+          <Stack.Screen name="products" component={Products} />
+          <Stack.Screen name="sales" component={Sales} />
+          <Stack.Screen name="storage" component={StoragePage} />
         </Stack.Navigator>
       </PaperProvider>
     </ThemeProvider>

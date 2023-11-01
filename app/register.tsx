@@ -1,11 +1,9 @@
 import React, { useReducer, useState } from "react";
-import { Center, Title } from "../components";
+import { Center, Navbar, Title } from "../components";
 import { Pressable, View } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { SelectList } from "react-native-dropdown-select-list";
 import { supabase } from "./lib/supabase";
-import { JobTitle } from "../interfaces";
-import { router } from "expo-router";
 
 type State = {
   name: string;
@@ -88,6 +86,7 @@ const Register: React.FC = () => {
 
   return (
     <Center>
+      <Navbar logoShown={false} />
       <Title size="md" bold>
         Registro
       </Title>

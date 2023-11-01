@@ -22,8 +22,8 @@ export const OptionCard: React.FC<Props> = ({ icon, label, href }) => {
     }}
       onPress={() => router.push(`/${href}`)}
     >
-      <Image source={icon} style={{ width: 45, height: 50 }} />
-      <Title size='md' bold>{label}</Title>
+      <Image source={icon} style={{ width: 60, height: 62 }} />
+      <Title size='sm' bold>{label}</Title>
     </Pressable>
   )
 }

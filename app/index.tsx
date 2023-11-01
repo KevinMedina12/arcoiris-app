@@ -12,12 +12,12 @@ export default function Home() {
 
   const handleLogin = async () => {
     try {
-      const { data, error } = await supabase.from("users").insert([{ email, password }]);
-      if (error) {
-        console.error("Error saving data to Supabase:", error);
-        return;
-      }
-
+      /*      const { data, error } = await supabase.from("users").insert([{ email, password }]);
+            if (error) {
+              console.error("Error saving data to Supabase:", error);
+              return;
+            }
+      */
       setEmail("");
       setPassword("");
       router.push("/dashboard-menu")
