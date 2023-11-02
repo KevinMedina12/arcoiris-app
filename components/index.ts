@@ -5,3 +5,4 @@ export { EmployeeList } from '../components/EmployeeList'
 export { Badge } from '../components/Badge';
 export { OptionCard } from '../components/OptionCard'
 export { Navbar } from '../components/Navbar'
+export { DataTableProducts } from "../components/DataTable";

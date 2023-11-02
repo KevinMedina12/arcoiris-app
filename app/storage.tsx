@@ -1,11 +1,58 @@
 import React from 'react';
-import { Center } from '../components';
-import { Text } from '../components/Themed';
+import { Center, DataTableProducts, Navbar, Title } from '../components';
+import { Text, View } from '../components/Themed';
 
 export default function StoragePage() {
+
+  const [items] = React.useState([
+    {
+      key: 1,
+      name: "Cupcake",
+      quantity: 356,
+      price: 16,
+      provider: "Pelikan",
+    },
+    {
+      key: 2,
+      name: "Cupcake",
+      quantity: 356,
+      price: 16,
+      provider: "Pelikan",
+    },
+    {
+      key: 3,
+      name: "Cupcake",
+      quantity: 356,
+      price: 16,
+      provider: "Pelikan",
+    },
+    {
+      key: 4,
+      name: "Cupcake",
+      quantity: 356,
+      price: 16,
+      provider: "Pelikan",
+    },
+    {
+      key: 5,
+      name: "Cupcake",
+      quantity: 356,
+      price: 16,
+      provider: "Pelikan",
+    },
+    {
+      key: 6,
+      name: "Cupcake",
+      quantity: 356,
+      price: 16,
+      provider: "Pelikan",
+    },
+  ]);
   return (
-    <Center>
-      <Text>Storage page</Text>
-    </Center>
+    <View>
+      <Navbar logoShown />
+      <Title size='md' bold>Inventario</Title>
+      <DataTableProducts items={items} />
+    </View>
   )
 }

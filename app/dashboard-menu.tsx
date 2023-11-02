@@ -1,7 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
-import { FontAwesome } from '@expo/vector-icons';
 import { Navbar, OptionCard, Title } from '../components';
 
 export default function DashboardMenu() {
@@ -24,12 +23,12 @@ export default function DashboardMenu() {
     },
     {
       icon: require("../assets/images/productos.png"),
-      label: "products",
+      label: "Productos",
       href: "products",
     },
     {
       icon: require("../assets/images/people.png"),
-      label: "employees",
+      label: "Empleados",
       href: "employees",
     }
   ]
