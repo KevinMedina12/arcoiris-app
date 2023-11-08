@@ -1,24 +1,61 @@
-import React, { useState } from "react";
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import React, { useCallback, useState } from "react";
+import { View, Text, Pressable, Image } from "react-native";
 import DataList from "../components/reusable/DataList";
 import { Navbar, Title } from "../components";
 import { Button, Modal, Portal, TextInput } from "react-native-paper";
 import { FontAwesome } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
+import { Content, ModalContentProps } from "../interfaces";
+import { DefaultContent } from "../components/modal/DefaultContent";
+import { QRContent } from "../components/modal/QRContent";
+import {
+  CashPaymentContent,
+  PaymentContent,
+} from "../components/modal/PaymentContent";
+
+type Route = "sales" | "billing";
+
+const initialRows = [
+  ["Calculadora Casio X-64", "13", "50.00"],
+  ["Lapiz RM", "20", "8.00"],
+  ["Sobre Carta", "25", "3.00"],
+];
+
+const columns = ["Producto", "Cantidad", "Valor"];
+
+const productsMock = [
+  {
+    product: "Calculadora Casio",
+    code: "9284593",
+    price: "240.00",
+  },
+  {
+    product: "Lapiz PM",
+    code: "0409299",
+    price: "24.50",
+  },
+  {
+    product: "Libreta Scribe",
+    code: "0303404",
+    price: "44.00",
+  },
+];
 
 export default function Sales() {
-  const [route, setRoute] = useState("sales"); // Default route is "sales"
-  const [visible, setVisible] = React.useState(false);
-  const [modalContent, setModalContent] = useState("default"); // New state to control modal content
+  const [route, setRoute] = useState<Route>("sales");
+  const [visible, setVisible] = useState(false);
+  const [modalContent, setModalContent] = useState<Content>("default");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredProducts, setFilteredProducts] = useState(productsMock);
+  const [rows, setRows] = useState(initialRows);
 
-  const showModal = () => {
-    setModalContent("default"); // Reset modal content to default when showing modal
-    setVisible(true);
-  };
-
-  const hideModal = () => setVisible(false);
   const containerStyle = {
-    backgroundColor: modalContent === "default" ? "#1F2636" : "#fff",
+    backgroundColor:
+      modalContent === "default"
+        ? "#1F2636"
+        : modalContent === "qr"
+          ? "#fff"
+          : "#1F2636",
     padding: 20,
     margin: 20,
     borderRadius: 20,
@@ -32,32 +69,38 @@ export default function Sales() {
     elevation: 5,
   };
 
-  const columns = ["Producto", "Cantidad", "Valor"];
-  const initialRows = [
-    ["Calculadora Casio X-64", "13", "50.00"],
-    ["Lapiz RM", "20", "8.00"],
-    ["Sobre Carta", "25", "3.00"],
-  ];
-  const [rows, setRows] = useState(initialRows);
+  const showModal = useCallback(() => {
+    setModalContent("default");
+    setVisible(true);
+  }, []);
 
-  const handleDelete = (index: number) => {
-    const updatedRows = [...rows];
-    updatedRows.splice(index, 1);
-    setRows(updatedRows);
-  };
+  const hideModal = useCallback(() => setVisible(false), []);
 
-  const handleQRPress = () => {
-    setModalContent("qr"); // Change modal content to "qr"
-  };
+  const handleDelete = useCallback((index: number) => {
+    setRows((prevRows) => prevRows.filter((_, i) => i !== index));
+  }, []);
 
-  const renderRoute = () => {
+  const handleQRPress = useCallback(() => {
+    setModalContent("qr");
+  }, []);
+
+  const handleSearch = useCallback((query: string) => {
+    setSearchQuery(query);
+    setFilteredProducts(
+      query.trim()
+        ? productsMock.filter((product) => product.code.includes(query.trim()))
+        : productsMock
+    );
+  }, []);
+
+  const renderRoute = useCallback(() => {
     switch (route) {
       case "sales":
         return (
           <DataList
-            columns={columns}
+            columns={["Producto", "Cantidad", "Valor"]}
             rows={rows}
-            onDelete={(index) => handleDelete(index)}
+            onDelete={handleDelete}
           />
         );
       case "billing":
@@ -67,11 +110,29 @@ export default function Sales() {
       default:
         return (
           <DataList
-            columns={columns}
+            columns={["Producto", "Cantidad", "Valor"]}
             rows={rows}
-            onDelete={(index) => handleDelete(index)}
+            onDelete={handleDelete}
           />
         );
+    }
+  }, [route, rows, handleDelete]);
+
+  const ModalContent = ({
+    modalContent,
+    ...props
+  }: { modalContent: Content } & ModalContentProps) => {
+    switch (modalContent) {
+      case "default":
+        return <DefaultContent {...props} handleQRPress={handleQRPress} />;
+      case "qr":
+        return <QRContent {...props} />;
+      case "payment":
+        return <PaymentContent {...props} />;
+      case "cash_payment":
+        return <CashPaymentContent />;
+      default:
+        return <Text>Hola</Text>; // Consider creating a separate component for this default case as well
     }
   };
 
@@ -117,59 +178,15 @@ export default function Sales() {
           onDismiss={hideModal}
           contentContainerStyle={containerStyle}
         >
-          {modalContent === "default" ? (
-            <View>
-              <Pressable onPress={handleQRPress}>
-                <FontAwesome name="qrcode" color="#FFF3F3" size={20} />
-              </Pressable>
-              <View style={{ display: "flex", gap: 10 }}>
-                <Title size="sm">Subtotal $136.00</Title>
-                <Title size="sm">IVA $26.08</Title>
-                <Title size="sm" bold>
-                  Total: $162.08
-                </Title>
-              </View>
-              <Button
-                mode="contained"
-                onPress={hideModal}
-                style={{ marginTop: 24, borderRadius: 20, paddingVertical: 8 }}
-              >
-                Realizar pago
-              </Button>
-            </View>
-          ) : (
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 20,
-                padding: 10,
-              }}
-            >
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100%",
-                }}
-              >
-                <Text>Buscar por codigo de barras</Text>
-                <Pressable onPress={hideModal}>
-                  <FontAwesome name="close" color="#515776" size={20} />
-                </Pressable>
-              </View>
-
-              <View style={{ display: "flex", gap: 15, alignSelf: "center" }}>
-                <FontAwesome name="barcode" color="black" size={100} />
-                <TextInput
-                  placeholder="Codigo"
-                  placeholderTextColor="#515776"
-                />
-              </View>
-            </View>
-          )}
+          <ModalContent
+            modalContent={modalContent}
+            setModalContent={setModalContent}
+            searchQuery={searchQuery}
+            handleSearch={handleSearch}
+            filteredProducts={filteredProducts}
+            hideModal={hideModal}
+            handleQRPress={handleQRPress}
+          />
         </Modal>
       </Portal>
       <Button mode="contained" textColor="#fff" onPress={showModal}>
