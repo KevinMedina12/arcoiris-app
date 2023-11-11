@@ -1,14 +1,23 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
+import React from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
+import { Route } from "../../interfaces/";
 
 interface DataListProps {
   columns: string[];
   rows: string[][];
-  onDelete: (rowIndex: number) => void;
+  onDelete?: (rowIndex: number) => void;
+  onFileIconPress?: () => void; // Add this prop for handling file icon click
+  route: Route;
 }
 
-const DataList: React.FC<DataListProps> = ({ columns, rows, onDelete }) => {
+const DataList: React.FC<DataListProps> = ({
+  columns,
+  rows,
+  onDelete,
+  onFileIconPress,
+  route,
+}) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -25,9 +34,24 @@ const DataList: React.FC<DataListProps> = ({ columns, rows, onDelete }) => {
               {item}
             </Text>
           ))}
-          <TouchableOpacity onPress={() => onDelete(rowIndex)}>
-            <FontAwesome name="trash" color="#FF3E83" size={16} />
-          </TouchableOpacity>
+          {route === "sales" ? (
+            <TouchableOpacity onPress={() => onDelete!(rowIndex)}>
+              <FontAwesome name="trash" color="#FF3E83" size={16} />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={onFileIconPress}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: 10,
+                backgroundColor: "#4F26E2"
+              }}
+            >
+              <FontAwesome name="file" color="#fff" size={18} />
+            </TouchableOpacity>
+          )}
         </View>
       ))}
     </View>
@@ -37,33 +61,33 @@ const DataList: React.FC<DataListProps> = ({ columns, rows, onDelete }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 50,
   },
   header: {
-    flexDirection: 'row',
+    flexDirection: "row",
     borderBottomWidth: 1,
-    borderBottomColor: 'black',
+    borderBottomColor: "black",
   },
   columnHeader: {
     flex: 1,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
     color: "#fff",
     padding: 10,
   },
   row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     borderBottomWidth: 1,
-    borderBottomColor: 'lightgray',
+    borderBottomColor: "lightgray",
     padding: 10,
   },
   cell: {
     flex: 1,
-    textAlign: 'center',
+    textAlign: "center",
     color: "#fff",
   },
 });

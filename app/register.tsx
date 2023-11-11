@@ -4,6 +4,7 @@ import { Pressable, View } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { SelectList } from "react-native-dropdown-select-list";
 import { supabase } from "./lib/supabase";
+import { router } from "expo-router";
 
 type State = {
   name: string;
@@ -57,7 +58,14 @@ const Register: React.FC = () => {
   const register = async () => {
     try {
       const { name, lastName, email, phone, password } = state;
-      if (!name.trim() && !lastName.trim() && !email.trim() && !phone.trim() && !password.trim() && !selectedJobTitle.trim()) {
+      if (
+        !name.trim() &&
+        !lastName.trim() &&
+        !email.trim() &&
+        !phone.trim() &&
+        !password.trim() &&
+        !selectedJobTitle.trim()
+      ) {
         alert("Todos los campos deben ser llenados");
         return;
       }
@@ -79,6 +87,7 @@ const Register: React.FC = () => {
       }
 
       alert("Empleado registrado.");
+      router.replace("/employees");
     } catch (e) {
       console.error(e);
     }

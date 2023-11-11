@@ -1,28 +1,44 @@
-import React from "react";
-import { Center, EmployeeList, Title } from "../components";
+import React, { useState, useEffect } from "react";
+import { EmployeeList, Title } from "../components";
 import { FontAwesome } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { View } from "react-native";
+import { supabase } from "./lib/supabase";
 import { JobTitle } from "../interfaces";
 
-export default function Employees() {
-  const labels = ["Nombre", "Correo", "Telefono", "Cargo"];
+interface Employee {
+  name: string;
+  phone: string;
+  jobTitle: JobTitle;
+}
 
-  const employees = [
-    {
-      name: "Diego",
-      email: "diego@gmail.com",
-      phone: "8282882828",
-      jobTitle: "Supervisor" as JobTitle,
-    },
-  ];
+export default function Employees() {
+  const labels = ["Nombre", "Telefono", "Cargo"];
+  const [employees, setEmployees] = useState<Employee[]>([]);
+
+  const getEmployees = async () => {
+    try {
+      const { data, error } = await supabase.from("employees").select("*");
+      if (error) {
+        console.error(error);
+        setEmployees([]);
+      } else {
+        setEmployees(data || []);
+      }
+    } catch (error) {
+      console.error("Error fetching employees:", error);
+      setEmployees([]);
+    }
+  };
+
+  useEffect(() => {
+    getEmployees();
+  }, []); // Empty dependency array means this effect runs once when the component mounts
 
   return (
     <View
       style={{
         padding: 20,
-        display: "flex",
-        flexDirection: "column",
         height: "100%",
       }}
     >
@@ -42,12 +58,17 @@ export default function Employees() {
           color="white"
           size={24}
         />
-        <Title size="md" bold>Empleados</Title>
-        <FontAwesome name="address-book" color="white" size={24} onPress={() => router.push("/register")} />
+        <Title size="md" bold>
+          Empleados
+        </Title>
+        <FontAwesome
+          name="address-book"
+          color="white"
+          size={24}
+          onPress={() => router.push("/register")}
+        />
       </View>
-      <Title size="md">
-        Bienvenido, Sebastian Mendoza
-      </Title>
+      <Title size="md">Bienvenido, Sebastian Mendoza</Title>
       <EmployeeList labels={labels} employees={employees} />
     </View>
   );

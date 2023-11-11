@@ -13,7 +13,7 @@ export const Badge: React.FC<Props> = ({ type, children }) => {
     <View
       style={{
         backgroundColor:
-          type === "Administrativo"
+          type === "Administrador"
             ? "#4200FF"
             : type === "Supervisor"
               ? "#126540"
@@ -22,14 +22,15 @@ export const Badge: React.FC<Props> = ({ type, children }) => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        marginLeft: 30,
         padding: 5
       }}
     >
       <Text
         style={{
           color:
-            type === "Administrativo"
-              ? "#A88AFF"
+            type === "Administrador"
+              ? "#B28AFF"
               : type === "Supervisor"
                 ? "#5EFAB4"
                 : "#201CFF",

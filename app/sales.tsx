@@ -1,19 +1,18 @@
 import React, { useCallback, useState } from "react";
-import { View, Text, Pressable, Image } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import DataList from "../components/reusable/DataList";
 import { Navbar, Title } from "../components";
-import { Button, Modal, Portal, TextInput } from "react-native-paper";
-import { FontAwesome } from "@expo/vector-icons";
+import { Button, Modal, Portal } from "react-native-paper";
 import { BlurView } from "expo-blur";
-import { Content, ModalContentProps } from "../interfaces";
+import { Content, ModalContentProps, Route } from "../interfaces";
 import { DefaultContent } from "../components/modal/DefaultContent";
 import { QRContent } from "../components/modal/QRContent";
 import {
+  BillingContent,
+  CardPaymentContent,
   CashPaymentContent,
   PaymentContent,
 } from "../components/modal/PaymentContent";
-
-type Route = "sales" | "billing";
 
 const initialRows = [
   ["Calculadora Casio X-64", "13", "50.00"],
@@ -84,6 +83,10 @@ export default function Sales() {
     setModalContent("qr");
   }, []);
 
+  const handlePayment = useCallback(() => {
+    setModalContent("billing");
+  }, []);
+
   const handleSearch = useCallback((query: string) => {
     setSearchQuery(query);
     setFilteredProducts(
@@ -93,19 +96,32 @@ export default function Sales() {
     );
   }, []);
 
+
+  const showInvoice = useCallback(() => {
+    setModalContent("billing");
+    setVisible(true);
+  }, []);
+
+
   const renderRoute = useCallback(() => {
     switch (route) {
       case "sales":
         return (
           <DataList
-            columns={["Producto", "Cantidad", "Valor"]}
+            columns={columns}
             rows={rows}
             onDelete={handleDelete}
+            route={route}
           />
         );
       case "billing":
         return (
-          <Text style={{ fontSize: 20, textAlign: "center" }}>Facturación</Text>
+          <DataList
+            columns={["ID", "Fecha", "Monto"]}
+            rows={[["#18850", "10/11/2023", "$77.00"]]}
+            onFileIconPress={showInvoice}
+            route={route}
+          />
         );
       default:
         return (
@@ -113,6 +129,7 @@ export default function Sales() {
             columns={["Producto", "Cantidad", "Valor"]}
             rows={rows}
             onDelete={handleDelete}
+            route={route}
           />
         );
     }
@@ -130,9 +147,13 @@ export default function Sales() {
       case "payment":
         return <PaymentContent {...props} />;
       case "cash_payment":
-        return <CashPaymentContent />;
+        return <CashPaymentContent handlePayment={handlePayment} />;
+      case "card_payment":
+        return <CardPaymentContent />;
+      case "billing":
+        return <BillingContent />;
       default:
-        return <Text>Hola</Text>; // Consider creating a separate component for this default case as well
+        return <DefaultContent {...props} handleQRPress={handleQRPress} />;
     }
   };
 
@@ -182,6 +203,7 @@ export default function Sales() {
             modalContent={modalContent}
             setModalContent={setModalContent}
             searchQuery={searchQuery}
+            handlePayment={handlePayment}
             handleSearch={handleSearch}
             filteredProducts={filteredProducts}
             hideModal={hideModal}
@@ -189,9 +211,13 @@ export default function Sales() {
           />
         </Modal>
       </Portal>
-      <Button mode="contained" textColor="#fff" onPress={showModal}>
-        Realizar pago
-      </Button>
+      {
+        route === "sales" && (
+          <Button mode="contained" textColor="#fff" onPress={showModal}>
+            Realizar pago
+          </Button>
+        )
+      }
     </BlurView>
   );
 }

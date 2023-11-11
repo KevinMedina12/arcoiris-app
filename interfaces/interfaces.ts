@@ -1,16 +1,17 @@
-export type JobTitle = "Administrativo" | "Supervisor" | "Empleado";
+export type JobTitle = "Administrador" | "Supervisor" | "Empleado";
 
 export type ModalContentProps = {
   setModalContent: (content: Content) => void;
   searchQuery: string;
   handleSearch: (query: string) => void;
+  handlePayment: () => void;
   filteredProducts: Product[];
   hideModal: () => void;
   handleQRPress: () => void; // Added this line
 };
 
 
-export type Content = "default" | "qr" | "payment" | "cash_payment" | "card_payment";
+export type Content = "default" | "qr" | "payment" | "cash_payment" | "card_payment" | "billing";
 
 
 export type Product = {
@@ -19,4 +20,5 @@ export type Product = {
   price: string;
 };
 
+export type Route = "sales" | "billing";
 
