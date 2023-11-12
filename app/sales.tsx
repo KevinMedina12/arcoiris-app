@@ -18,6 +18,9 @@ const initialRows = [
   ["Calculadora Casio X-64", "13", "50.00"],
   ["Lapiz RM", "20", "8.00"],
   ["Sobre Carta", "25", "3.00"],
+  ["Tijera Scotch", "26", "16.00"],
+  ["Caja Clip", "20", "45.00"],
+  ["Carpeta", "14", "30.00"],
 ];
 
 const columns = ["Producto", "Cantidad", "Valor"];
@@ -37,6 +40,16 @@ const productsMock = [
     product: "Libreta Scribe",
     code: "0303404",
     price: "44.00",
+  },
+  {
+    product: "Carpeta",
+    code: "395482",
+    price: "30.00"
+  },
+  {
+    product: "Caja Clip",
+    code: "934829",
+    price: "45.00"
   },
 ];
 
@@ -118,7 +131,14 @@ export default function Sales() {
         return (
           <DataList
             columns={["ID", "Fecha", "Monto"]}
-            rows={[["#18850", "10/11/2023", "$77.00"]]}
+            rows={[
+            ["#18850", "8/11/2023", "$168.00"],
+            ["#18240", "8/11/2023", "$218.00"],
+            ["#15120", "6/11/2023", "$34.50"],
+            ["#13350", "6/11/2023", "$308.00"],
+            ["#14860", "3/11/2023", "$42.00"],
+            ["#17851", "26/10/2023", "$521.00"],
+            ]}
             onFileIconPress={showInvoice}
             route={route}
           />
@@ -169,7 +189,7 @@ export default function Sales() {
       }}
       tint="dark"
     >
-      <Navbar logoShown />
+      <Navbar logoShown iconRoute />
       <View style={{ flexDirection: "row", justifyContent: "center", gap: 20 }}>
         <Pressable
           onPress={() => setRoute("sales")}

@@ -85,81 +85,100 @@ export const CashPaymentContent = ({
   handlePayment,
 }: {
   handlePayment: () => void;
-}) => (
-  <View
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      gap: 15,
-      alignItems: "flex-start",
-    }}
-  >
-    <Title size="md" bold>
-      Efectivo
-    </Title>
+}) => {
+  const [selectedValue, setSelectedValue] = useState("");
+  const [receivedAmount, setReceivedAmount] = useState("");
 
+  const handleOptionPress = (valueOption: string) => {
+    setSelectedValue(valueOption);
+    setReceivedAmount(valueOption);
+  };
+
+  const isOptionSelected = (valueOption: string) =>
+    selectedValue === valueOption;
+  return (
     <View
       style={{
         display: "flex",
         flexDirection: "column",
-        gap: 5,
+        gap: 15,
         alignItems: "flex-start",
       }}
     >
-      <Title size="sm">Total</Title>
       <Title size="md" bold>
-        $ 281.88
+        Efectivo
       </Title>
-    </View>
-
-    <View
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 10,
-        alignItems: "flex-start",
-      }}
-    >
-      <Title size="sm">Monto Recibido</Title>
-      <TextInput
-        placeholder="Monto"
-        placeholderTextColor="#fff"
-        textColor="#fff"
-        mode="outlined"
-        keyboardType="numbers-and-punctuation"
-        style={{ backgroundColor: "#242B3D", maxWidth: 140, color: "#fff" }}
-      />
 
       <View
-        style={{ display: "flex", flexDirection: "row", gap: 15, margin: 20 }}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 5,
+          alignItems: "flex-start",
+        }}
       >
-        {["50", "100", "200", "500"].map((valueOption, idx) => (
-          <Pressable
-            onPress={() => { }}
-            style={{
-              borderWidth: 0.5,
-              borderColor: "#00F946",
-              borderRadius: 10,
-              padding: 10,
-            }}
-            key={idx}
-          >
-            <Title size="sm">${valueOption}</Title>
-          </Pressable>
-        ))}
+        <Title size="sm">Total</Title>
+        <Title size="md" bold>
+          $ 168.00
+        </Title>
       </View>
 
-      <Button
-        mode="contained"
-        textColor="#fff"
-        style={{ alignSelf: "center" }}
-        onPress={handlePayment}
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 10,
+          alignItems: "flex-start",
+        }}
       >
-        Realizar pago
-      </Button>
+        <Title size="sm">Monto Recibido</Title>
+        <TextInput
+          placeholder="Monto"
+          value={receivedAmount}
+          onChangeText={setReceivedAmount}
+          placeholderTextColor="#fff"
+          textColor="#fff"
+          mode="outlined"
+          keyboardType="numbers-and-punctuation"
+          style={{ backgroundColor: "#242B3D", maxWidth: 140, color: "#fff" }}
+        />
+
+        <View
+          style={{ display: "flex", flexDirection: "row", gap: 15, margin: 20 }}
+        >
+          {["50", "100", "200", "500"].map((valueOption, idx) => (
+            <Pressable
+              key={idx}
+              onPress={() => handleOptionPress(valueOption)}
+              style={{
+                borderWidth: 0.5,
+                borderColor: isOptionSelected(valueOption) ? "#fff" : "#00F946",
+                borderRadius: 10,
+                padding: 10,
+                backgroundColor: isOptionSelected(valueOption)
+                  ? "#2BF04B"
+                  : "transparent",
+              }}
+            >
+              <Title size="sm" bold={isOptionSelected(valueOption)}>
+                ${valueOption}
+              </Title>
+            </Pressable>
+          ))}
+        </View>
+
+        <Button
+          mode="contained"
+          textColor="#fff"
+          style={{ alignSelf: "center" }}
+          onPress={handlePayment}
+        >
+          Realizar pago
+        </Button>
+      </View>
     </View>
-  </View>
-);
+  );
+};
 
 export const CardPaymentContent = () => {
   const [title, setTitle] = useState({
@@ -252,6 +271,9 @@ export const BillingContent = () => {
             "Calculadora Casio X-64",
             "Lapiz RM",
             "Sobre Carta",
+            "Carpeta",
+            "Tijera scotch",
+            "Caja Clip",
             "IVA",
             "Pago Total",
             "Monto",
@@ -275,15 +297,26 @@ export const BillingContent = () => {
             alignItems: "center",
           }}
         >
-          {["50.00", "8.00", "3.00", "16.00", "77.00", "100", "23"].map(
-            (price, idx) => (
-              <Title size="sm" key={idx}
-                bold={price === "16.00" || price === "77.00"}
-              >
-                M.N. ${price}
-              </Title>
-            )
-          )}
+          {[
+            "50.00",
+            "8.00",
+            "3.00",
+            "14.00",
+            "45.00",
+            "30.00",
+            "16.00",
+            "168.00",
+            "200.00",
+            "32.00",
+          ].map((price, idx) => (
+            <Title
+              size="sm"
+              key={idx}
+              bold={price === "16.00" || price === "168.00"}
+            >
+              M.N. ${price}
+            </Title>
+          ))}
         </View>
       </View>
       <Divider />

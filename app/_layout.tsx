@@ -17,6 +17,7 @@ import Clients from "./clients";
 import Products from "./products";
 import Sales from "./sales";
 import StoragePage from "./storage";
+import SalesEventsScreen from "./sales-events";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -73,6 +74,7 @@ function RootLayoutNav() {
           <Stack.Screen name="products" component={Products} />
           <Stack.Screen name="sales" component={Sales} />
           <Stack.Screen name="storage" component={StoragePage} />
+          <Stack.Screen name="sales-events" component={SalesEventsScreen}/>
         </Stack.Navigator>
       </PaperProvider>
     </ThemeProvider>

@@ -8,7 +8,7 @@ interface DataListProps {
   rows: string[][];
   onDelete?: (rowIndex: number) => void;
   onFileIconPress?: () => void; // Add this prop for handling file icon click
-  route: Route;
+  route?: Route;
 }
 
 const DataList: React.FC<DataListProps> = ({
@@ -38,7 +38,7 @@ const DataList: React.FC<DataListProps> = ({
             <TouchableOpacity onPress={() => onDelete!(rowIndex)}>
               <FontAwesome name="trash" color="#FF3E83" size={16} />
             </TouchableOpacity>
-          ) : (
+          ) : route === "billing" ? (
             <TouchableOpacity
               onPress={onFileIconPress}
               style={{
@@ -51,7 +51,8 @@ const DataList: React.FC<DataListProps> = ({
             >
               <FontAwesome name="file" color="#fff" size={18} />
             </TouchableOpacity>
-          )}
+          ) : null
+          }
         </View>
       ))}
     </View>

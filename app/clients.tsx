@@ -3,29 +3,30 @@ import { Navbar, OptionCard, Title } from "../components";
 import { View } from "../components/Themed";
 import { Pressable } from "react-native";
 
+const menuOptions = [
+  {
+    icon: require("../assets/images/prepa15.png"),
+    label: "Preparatoria 15",
+    href: "clients",
+  },
+  {
+    icon: require("../assets/images/prepa6.png"),
+    label: "Preparatoria 6",
+    href: "sales",
+  },
+  {
+    icon: require("../assets/images/prepa22.png"),
+    label: "Preparatoria 22",
+    href: "storage",
+  },
+  {
+    icon: require("../assets/images/randstad.png"),
+    label: "Randstad",
+    href: "products",
+  },
+];
+
 const ClientsRoute = () => {
-  const menuOptions = [
-    {
-      icon: require("../assets/images/prepa15.png"),
-      label: "Preparatoria 15",
-      href: "clients",
-    },
-    {
-      icon: require("../assets/images/prepa6.png"),
-      label: "Preparatoria 6",
-      href: "sales",
-    },
-    {
-      icon: require("../assets/images/prepa22.png"),
-      label: "Preparatoria 22",
-      href: "storage",
-    },
-    {
-      icon: require("../assets/images/randstad.png"),
-      label: "Randstad",
-      href: "products",
-    },
-  ];
   return (
     <View
       style={{
@@ -49,29 +50,29 @@ const ClientsRoute = () => {
   );
 };
 
+const providerMock = [
+  {
+    icon: require("../assets/images/scribe.png"),
+    label: "Scribe",
+    href: "clients",
+  },
+  {
+    icon: require("../assets/images/dixon.png"),
+    label: "Dixon",
+    href: "dixon",
+  },
+  {
+    icon: require("../assets/images/bic.png"),
+    label: "Bic",
+    href: "bic",
+  },
+  {
+    icon: require("../assets/images/pelikan.png"),
+    label: "Pelikan",
+    href: "pelikan",
+  },
+];
 const ProvidersRoute = () => {
-  const menuOptions = [
-    {
-      icon: require("../assets/images/scribe.png"),
-      label: "Scribe",
-      href: "clients",
-    },
-    {
-      icon: require("../assets/images/dixon.png"),
-      label: "Dixon",
-      href: "dixon",
-    },
-    {
-      icon: require("../assets/images/bic.png"),
-      label: "Bic",
-      href: "bic",
-    },
-    {
-      icon: require("../assets/images/pelikan.png"),
-      label: "Pelikan",
-      href: "pelikan",
-    },
-  ];
   return (
     <View
       style={{
@@ -83,7 +84,7 @@ const ProvidersRoute = () => {
         gap: 20,
       }}
     >
-      {menuOptions.map((opt, idx) => (
+      {providerMock.map((opt, idx) => (
         <OptionCard
           icon={opt.icon}
           label={opt.label}

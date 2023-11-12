@@ -6,8 +6,10 @@ import { router } from "expo-router";
 
 interface Props {
   logoShown: boolean;
+  iconRoute?: boolean 
 }
-export const Navbar: React.FC<Props> = ({ logoShown = true }): JSX.Element => {
+export const Navbar: React.FC<Props> = ({ logoShown = true, iconRoute }): JSX.Element => {
+  const route = iconRoute ? "/sales-events" : "/register";
   return (
     <View
       style={{
@@ -44,7 +46,7 @@ export const Navbar: React.FC<Props> = ({ logoShown = true }): JSX.Element => {
           borderRadius: 10,
           width: 60
         }}
-        onPress={() => router.replace("/register")}
+        onPress={() => router.replace(route)}
       >
         <FontAwesome name="address-book" color="#fff" size={20} />
       </Pressable>

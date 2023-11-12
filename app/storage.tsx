@@ -1,51 +1,51 @@
 import React from 'react';
-import { Center, DataTableProducts, Navbar, Title } from '../components';
-import { Text, View } from '../components/Themed';
+import { DataTableProducts, Navbar, Title } from '../components';
+import { View } from '../components/Themed';
 
 export default function StoragePage() {
 
   const [items] = React.useState([
     {
       key: 1,
-      name: "Cupcake",
-      quantity: 356,
-      price: 16,
+      name: "Carpeta",
+      quantity: 136,
+      price: 12.50,
       provider: "Pelikan",
     },
     {
       key: 2,
-      name: "Cupcake",
-      quantity: 356,
-      price: 16,
-      provider: "Pelikan",
+      name: "Lapiz RM",
+      quantity: 221,
+      price: 13.00,
+      provider: "Bic",
     },
     {
       key: 3,
-      name: "Cupcake",
-      quantity: 356,
-      price: 16,
+      name: "Sobre Carta",
+      quantity: 62,
+      price: 7.00,
       provider: "Pelikan",
     },
     {
       key: 4,
-      name: "Cupcake",
-      quantity: 356,
-      price: 16,
-      provider: "Pelikan",
+      name: "Caja Clip",
+      quantity: 30,
+      price: 45.00,
+      provider: "Dixon",
     },
     {
       key: 5,
-      name: "Cupcake",
-      quantity: 356,
+      name: "Tijera scotch",
+      quantity: 31,
       price: 16,
-      provider: "Pelikan",
+      provider: "Scribe",
     },
     {
       key: 6,
-      name: "Cupcake",
-      quantity: 356,
-      price: 16,
-      provider: "Pelikan",
+      name: "Calculadora Casio",
+      quantity: 32,
+      price: 140,
+      provider: "Casio",
     },
   ]);
   return (

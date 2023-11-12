@@ -3,7 +3,13 @@ import { ModalContentProps } from "../../interfaces";
 import { FontAwesome } from "@expo/vector-icons";
 import { TextInput } from "react-native-paper";
 
-export const QRContent = ({ searchQuery, handleSearch, filteredProducts, setModalContent, hideModal }: ModalContentProps) => (
+export const QRContent = ({
+  searchQuery,
+  handleSearch,
+  filteredProducts,
+  setModalContent,
+  hideModal,
+}: ModalContentProps) => (
   <View
     style={{
       display: "flex",
