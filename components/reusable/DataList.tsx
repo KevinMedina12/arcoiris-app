@@ -46,13 +46,12 @@ const DataList: React.FC<DataListProps> = ({
                 justifyContent: "center",
                 alignItems: "center",
                 padding: 10,
-                backgroundColor: "#4F26E2"
+                backgroundColor: "#4F26E2",
               }}
             >
               <FontAwesome name="file" color="#fff" size={18} />
             </TouchableOpacity>
-          ) : null
-          }
+          ) : null}
         </View>
       ))}
     </View>
