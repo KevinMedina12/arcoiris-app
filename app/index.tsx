@@ -6,6 +6,7 @@ import { TextInput, Button } from "react-native-paper";
 import { supabase } from "./lib/supabase";
 import { router } from "expo-router";
 import { useLanguage } from "./context/LanguageProvider";
+import SwitchLanguage from "../components/SwitchLanguage";
 
 export default function Home() {
   const [email, setEmail] = useState("");
@@ -28,6 +29,7 @@ export default function Home() {
 
   return (
     <Center p={30}>
+      <SwitchLanguage />
       <GlassContainer>
         <Image
           source={require("../assets/images/arcoiris.png")}

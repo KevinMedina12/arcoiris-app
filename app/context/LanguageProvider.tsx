@@ -17,7 +17,9 @@ type LanguageContextType = {
   translations: Translations;
 };
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const LanguageContext = createContext<LanguageContextType | undefined>(
+  undefined
+);
 
 type LanguageProviderProps = {
   children: ReactNode;
@@ -31,16 +33,19 @@ export const useLanguage = (): LanguageContextType => {
   return context;
 };
 
-export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
+export const LanguageProvider: React.FC<LanguageProviderProps> = ({
+  children,
+}) => {
   const [language, setLanguage] = useState("es"); // Default language is English
 
   const translations = {
     emailPlaceholderText: language === "es" ? "Correo Electrónico" : "Email",
     passwordPlaceholderText: language === "es" ? "Contraseña" : "Password",
     signInLabelText: language === "es" ? "Iniciar Sesión" : "Sign In",
-    clientsLabel: language === "es" ? "Clientes y Proveedores" : "Clients and Providers",
+    clientsLabel:
+      language === "es" ? "Clientes y Proveedores" : "Clients and Providers",
     salaesLabel: language === "es" ? "Ventas" : "Sales",
-    manageProductsLabel: language === "es" ? "Storage" : "Almacén",
+    manageProductsLabel: language === "es" ? "Almacén" : "Storage",
     productsLabel: language === "es" ? "Productos" : "Products",
     employeeLabel: language === "es" ? "Empleados" : "Employees",
   };
@@ -50,7 +55,9 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   };
 
   return (
-    <LanguageContext.Provider value={{ language, toggleLanguage, translations }}>
+    <LanguageContext.Provider
+      value={{ language, toggleLanguage, translations }}
+    >
       {children}
     </LanguageContext.Provider>
   );
