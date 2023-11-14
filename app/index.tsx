@@ -5,27 +5,22 @@ import { View } from "../components/Themed";
 import { TextInput, Button } from "react-native-paper";
 import { supabase } from "./lib/supabase";
 import { router } from "expo-router";
+import { useLanguage } from "./context/LanguageProvider";
 
 export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { translations } = useLanguage();
 
   const handleLogin = async () => {
     try {
-      /*  if (!email.trim() && !password.trim()) {
-          alert("Todos los campos deben ser llenados");
-          return;
-        }
-  
-        const { error } = await supabase.from("users").insert([{ email, password }]);
-        if (error) {
-          console.error("Error saving data to Supabase:", error);
-          return;
-        }
-  */
+      if (!email.trim() && !password.trim()) {
+        alert("Todos los campos deben ser llenados");
+        return;
+      }
       setEmail("");
       setPassword("");
-      router.push("/dashboard-menu")
+      router.push("/dashboard-menu");
     } catch (error) {
       console.error("Error saving data to Supabase:", error);
     }
@@ -40,14 +35,14 @@ export default function Home() {
         />
         <View style={{ width: "100%" }}>
           <TextInput
-            label="Correo electronico"
+            label={translations.emailPlaceholderText}
             mode="outlined"
             style={{ backgroundColor: "#fff" }}
             value={email}
             onChangeText={(text) => setEmail(text)}
           />
           <TextInput
-            label="Contraseña"
+            label={translations.passwordPlaceholderText}
             secureTextEntry
             mode="outlined"
             style={{ backgroundColor: "#fff", marginTop: 30 }}
@@ -56,7 +51,9 @@ export default function Home() {
           />
         </View>
         <Pressable onPress={handleLogin}>
-          <Button mode="contained" textColor="#fff">Iniciar sesion</Button>
+          <Button mode="contained" textColor="#fff">
+            {translations.signInLabelText}
+          </Button>
         </Pressable>
       </GlassContainer>
     </Center>

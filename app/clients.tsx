@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Navbar, OptionCard, Title } from "../components";
 import { View } from "../components/Themed";
 import { Pressable } from "react-native";
+import { useLanguage } from "./context/LanguageProvider";
 
 const menuOptions = [
   {
@@ -98,6 +99,7 @@ const ProvidersRoute = () => {
 
 export default function Clients() {
   const [route, setRoute] = useState("clients"); // Default route is "clients"
+  const { language } = useLanguage();
 
   const renderRoute = () => {
     switch (route) {
@@ -138,23 +140,29 @@ export default function Clients() {
             gap: 20,
           }}
         >
-          <Pressable onPress={() => setRoute("clients")}
+          <Pressable
+            onPress={() => setRoute("clients")}
             style={{
               backgroundColor: route === "clients" ? "#243458" : "#0F172A",
               padding: 10,
-              borderRadius: 10
+              borderRadius: 10,
             }}
           >
-            <Title size="md">Clientes</Title>
+            <Title size="md">
+              {language === "es" ? "Clientes" : "Clients"}
+            </Title>
           </Pressable>
-          <Pressable onPress={() => setRoute("providers")}
+          <Pressable
+            onPress={() => setRoute("providers")}
             style={{
               backgroundColor: route === "providers" ? "#243458" : "#0F172A",
               padding: 10,
-              borderRadius: 10
+              borderRadius: 10,
             }}
           >
-            <Title size="md">Proveedores</Title>
+            <Title size="md">
+              {language === "es" ? "Proveedores" : "Providers"}
+            </Title>
           </Pressable>
         </View>
         {renderRoute()}

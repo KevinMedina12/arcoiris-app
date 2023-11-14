@@ -13,6 +13,7 @@ import {
   CashPaymentContent,
   PaymentContent,
 } from "../components/modal/PaymentContent";
+import { useLanguage } from "./context/LanguageProvider";
 
 const initialRows = [
   ["Calculadora Casio X-64", "13", "50.00"],
@@ -44,12 +45,12 @@ const productsMock = [
   {
     product: "Carpeta",
     code: "395482",
-    price: "30.00"
+    price: "30.00",
   },
   {
     product: "Caja Clip",
     code: "934829",
-    price: "45.00"
+    price: "45.00",
   },
 ];
 
@@ -60,6 +61,7 @@ export default function Sales() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredProducts, setFilteredProducts] = useState(productsMock);
   const [rows, setRows] = useState(initialRows);
+  const { language } = useLanguage();
 
   const containerStyle = {
     backgroundColor:
@@ -109,12 +111,10 @@ export default function Sales() {
     );
   }, []);
 
-
   const showInvoice = useCallback(() => {
     setModalContent("billing");
     setVisible(true);
   }, []);
-
 
   const renderRoute = useCallback(() => {
     switch (route) {
@@ -132,12 +132,12 @@ export default function Sales() {
           <DataList
             columns={["ID", "Fecha", "Monto"]}
             rows={[
-            ["#18850", "8/11/2023", "$168.00"],
-            ["#18240", "8/11/2023", "$218.00"],
-            ["#15120", "6/11/2023", "$34.50"],
-            ["#13350", "6/11/2023", "$308.00"],
-            ["#14860", "3/11/2023", "$42.00"],
-            ["#17851", "26/10/2023", "$521.00"],
+              ["#18850", "8/11/2023", "$168.00"],
+              ["#18240", "8/11/2023", "$218.00"],
+              ["#15120", "6/11/2023", "$34.50"],
+              ["#13350", "6/11/2023", "$308.00"],
+              ["#14860", "3/11/2023", "$42.00"],
+              ["#17851", "26/10/2023", "$521.00"],
             ]}
             onFileIconPress={showInvoice}
             route={route}
@@ -199,7 +199,9 @@ export default function Sales() {
             borderRadius: 10,
           }}
         >
-          <Text style={{ fontSize: 18, color: "white" }}>Ventas</Text>
+          <Text style={{ fontSize: 18, color: "white" }}>
+            {language === "es" ? "Ventas" : "Sales"}
+          </Text>
         </Pressable>
         <Pressable
           onPress={() => setRoute("billing")}
@@ -209,7 +211,9 @@ export default function Sales() {
             borderRadius: 10,
           }}
         >
-          <Text style={{ fontSize: 18, color: "white" }}>Facturación</Text>
+          <Text style={{ fontSize: 18, color: "white" }}>
+            {language === "es" ? "Facturación" : "Billing"}
+          </Text>
         </Pressable>
       </View>
       {renderRoute()}
@@ -231,13 +235,11 @@ export default function Sales() {
           />
         </Modal>
       </Portal>
-      {
-        route === "sales" && (
-          <Button mode="contained" textColor="#fff" onPress={showModal}>
-            Realizar pago
-          </Button>
-        )
-      }
+      {route === "sales" && (
+        <Button mode="contained" textColor="#fff" onPress={showModal}>
+          {language === "es" ? "Realizar pago" : "Complete payment"}
+        </Button>
+      )}
     </BlurView>
   );
 }

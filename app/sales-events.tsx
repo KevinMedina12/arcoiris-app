@@ -4,8 +4,10 @@ import { Navbar, Title } from "../components";
 import DataList from "../components/reusable/DataList";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
+import { useLanguage } from "./context/LanguageProvider";
 
 export default function SalesEventsScreen() {
+  const { language } = useLanguage();
   return (
     <View
       style={{
@@ -18,7 +20,7 @@ export default function SalesEventsScreen() {
     >
       <Navbar logoShown />
       <Title size="md" bold>
-        Registro de auditoria
+        {language === "es" ? "Registro de Auditoría" : "Sales Events"}
       </Title>
       <SafeAreaView>
         <ScrollView>

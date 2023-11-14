@@ -5,6 +5,7 @@ import { router, useFocusEffect } from "expo-router";
 import { View } from "react-native";
 import { supabase } from "./lib/supabase";
 import { JobTitle } from "../interfaces";
+import { useLanguage } from "./context/LanguageProvider";
 
 interface Employee {
   name: string;
@@ -15,6 +16,7 @@ interface Employee {
 export default function Employees() {
   const labels = ["Nombre", "Telefono", "Cargo"];
   const [employees, setEmployees] = useState<Employee[]>([]);
+  const { language } = useLanguage();
 
   const getEmployees = async () => {
     try {
@@ -68,7 +70,9 @@ export default function Employees() {
           onPress={() => router.push("/register")}
         />
       </View>
-      <Title size="md">Bienvenido, Sebastian Mendoza</Title>
+      <Title size="md">
+        {language === "es" ? "Bienvenido" : "Welcome"}, Sebastian Mendoza
+      </Title>
       <EmployeeList labels={labels} employees={employees} />
     </View>
   );
