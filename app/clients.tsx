@@ -7,7 +7,7 @@ import { useLanguage } from "./context/LanguageProvider";
 const menuOptions = [
   {
     icon: require("../assets/images/prepa15.png"),
-    label: "Preparatoria 15",
+    label: "Preparatoria 15345345",
     href: "clients",
   },
   {
