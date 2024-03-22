@@ -1,11 +1,45 @@
-import React from "react";
-import { View } from "react-native";
-import { router } from "expo-router";
-import { Navbar, OptionCard, Title } from "../components";
-import { useLanguage } from "./context/LanguageProvider";
+// dashboard-menu.tsx
 
-export default function DashboardMenu() {
+import React, { useEffect, useState } from "react";
+import { View, Pressable, Text } from "react-native";
+import { Navbar, OptionCard, Title } from "../components";
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
+import { useLanguage } from "./context/LanguageProvider";
+import firebase from "../Firebase";
+import { Button } from "react-native-paper";
+
+type RootStackParamList = {
+  Login: undefined;
+  Dashboard: undefined;
+};
+
+type DashboardScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Dashboard'>;
+
+// Exportación por defecto al momento de la declaración
+export default function DashboardMenu({ navigation }: { navigation: DashboardScreenNavigationProp }) {
   const { translations, language } = useLanguage();
+  const [userName, setUserName] = useState('');
+
+  useEffect(() => {
+    const fetchUserName = async () => {
+      const user = firebase.auth().currentUser;
+      if (user) {
+        setUserName(user.email || 'Usuario');
+      }
+    };
+    fetchUserName();
+  }, []);
+
+  const handleSignOut = async () => {
+    try {
+      await firebase.auth().signOut();
+      navigation.navigate('Login'); // Redirige a la pantalla de inicio de sesión
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
+  };
+
   const menuOptions = [
     {
       icon: require("../assets/images/user-group.png"),
@@ -33,6 +67,7 @@ export default function DashboardMenu() {
       href: "employees",
     },
   ];
+
   return (
     <View
       style={{
@@ -45,8 +80,17 @@ export default function DashboardMenu() {
     >
       <Navbar logoShown={false} />
       <Title size="md">
-        {language === "es" ? "Hola" : "Hi"}, Sebastian Mendoza
+        {language === "es" ? "Hola" : "Hi"}, {userName}
       </Title>
+      
+      <Pressable onPress={handleSignOut}>
+        <Button 
+          textColor="#fff"
+          style={{ backgroundColor: 'blue' , marginTop: 30 }} 
+        >
+          Cerrar sesión
+        </Button>
+      </Pressable>
       <View
         style={{
           marginTop: 20,
