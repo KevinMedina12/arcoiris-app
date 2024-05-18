@@ -137,35 +137,7 @@ export default function StoragePage() {
         />
       </View>
       <View style={styles.bottomSpace2}></View>
-      <View style={styles.formContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Nombre"
-          value={newProduct.name}
-          onChangeText={(text) => handleInputChange("name", text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Cantidad"
-          value={newProduct.quantity.toString()}
-          onChangeText={(text) => handleInputChange("quantity", text)}
-          keyboardType="numeric"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Precio"
-          value={newProduct.price.toString()}
-          onChangeText={(text) => handleInputChange("price", text)}
-          keyboardType="numeric"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Proveedor"
-          value={newProduct.provider}
-          onChangeText={(text) => handleInputChange("provider", text)}
-        />
-        <Button title="Agregar Producto" onPress={addProduct} />
-      </View>
+      
     </View>
     <View style={styles.bottomSpace}></View>
     </ScrollView>

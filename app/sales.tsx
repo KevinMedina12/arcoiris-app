@@ -1,78 +1,141 @@
-import React, { useCallback, useState } from "react";
-import { View, Text, Pressable } from "react-native";
-import DataList from "../components/reusable/DataList";
+import React, { useState, useEffect } from "react";
+import { View, Text, Button, StyleSheet, ScrollView, FlatList, TextInput } from "react-native";
 import { Navbar, Title } from "../components";
-import { Button, Modal, Portal } from "react-native-paper";
-import { BlurView } from "expo-blur";
-import { Content, ModalContentProps, Route } from "../interfaces";
-import { DefaultContent } from "../components/modal/DefaultContent";
-import { QRContent } from "../components/modal/QRContent";
-import {
-  BillingContent,
-  CardPaymentContent,
-  CashPaymentContent,
-  PaymentContent,
-} from "../components/modal/PaymentContent";
 import { useLanguage } from "./context/LanguageProvider";
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+import { db } from '../Firebase'; 
+import { collection } from 'firebase/firestore';
+import { QuerySnapshot } from 'firebase/firestore';
+import { TouchableOpacity, Image } from 'react-native';
+import { Alert } from 'react-native';
 
-const initialRows = [
-  ["Calculadora Casio X-64", "13", "50.00"],
-  ["Lapiz RM", "20", "8.00"],
-  ["Sobre Carta", "25", "3.00"],
-  ["Tijera Scotch", "26", "16.00"],
-  ["Caja Clip", "20", "45.00"],
-  ["Carpeta", "14", "30.00"],
-];
-
-const columns = ["Producto", "Cantidad", "Valor"];
-
-const productsMock = [
-  {
-    product: "Calculadora Casio",
-    code: "9284593",
-    price: "240.00",
-  },
-  {
-    product: "Lapiz PM",
-    code: "0409299",
-    price: "24.50",
-  },
-  {
-    product: "Libreta Scribe",
-    code: "0303404",
-    price: "44.00",
-  },
-  {
-    product: "Carpeta",
-    code: "395482",
-    price: "30.00",
-  },
-  {
-    product: "Caja Clip",
-    code: "934829",
-    price: "45.00",
-  },
-];
-
-export default function Sales() {
-  const [route, setRoute] = useState<Route>("sales");
-  const [visible, setVisible] = useState(false);
-  const [modalContent, setModalContent] = useState<Content>("default");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredProducts, setFilteredProducts] = useState(productsMock);
-  const [rows, setRows] = useState(initialRows);
+export default function StoragePage() {
   const { language } = useLanguage();
+  
+  const [searchTerm, setSearchTerm] = useState("");
+  interface Product {
+    id: string;
+    name: string;
+    quantity: number;
+    price: number;
+    provider: string;
+  }
+  
+  const [items, setItems] = useState<Product[]>([]);
+  
+  useEffect(() => {
+    const unsubscribe = firebase.firestore().collection('Productos').onSnapshot((snapshot: QuerySnapshot) => {
+      const products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setItems(products);
+    });
+    
+    return () => unsubscribe();
+  }, []);
 
-  const containerStyle = {
-    backgroundColor:
-      modalContent === "default"
-        ? "#1F2636"
-        : modalContent === "qr"
-          ? "#fff"
-          : "#1F2636",
+  const filteredItems = items.filter(item => {
+    return item.name.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+
+  const deleteProduct = async (id) => {
+    try {
+      await firebase.firestore().collection('Productos').doc(id).delete();
+    } catch (error) {
+      console.error("Error al eliminar producto: ", error);
+    }
+  };
+
+  return (
+    <ScrollView contentContainerStyle={styles.scrollViewContent}>
+      <View style={styles.container}>
+        <Navbar logoShown />
+        <Title size="md" bold>
+          {language === "es" ? "Productos" : "Storage"}
+        </Title>
+        <View style={styles.formContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Buscar producto..."
+            value={searchTerm}
+            onChangeText={setSearchTerm}
+          />
+        </View>
+        <View style={styles.tableContainer}>
+          <View style={styles.tableHeader}>
+            <Text style={styles.headerText}>Nombre</Text>
+            <Text style={styles.headerText}>Cantidad</Text>
+            <Text style={styles.headerText}>Precio</Text>
+            <Text style={styles.headerText}>Proveedor</Text>
+          </View>
+          <FlatList
+            data={filteredItems}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <View style={styles.row}>
+                <Text style={styles.cell}>{item.name}</Text>
+                <Text style={styles.cell}>{item.quantity}</Text>
+                <Text style={styles.cell}>{item.price}</Text>
+                <Text style={styles.cell}>{item.provider}</Text>
+                <TouchableOpacity onPress={() => deleteProduct(item.id)} style={styles.deleteButton}>
+                  <Image source={require('../assets/images/bote.png')} style={styles.deleteIcon}  />
+                </TouchableOpacity>
+              </View>
+            )}
+          />
+        </View>
+      </View>
+      <View style={styles.bottomSpace}></View>
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  tableContainer: {
+    flex: 1,
+    width: "85%",
+    marginTop: 20,
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+    backgroundColor: "#E0FFFF", // Color celeste
+    borderRadius: 5,
+    marginBottom: 5,
+  },
+  deleteButton: {
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  deleteIcon: {
+    width: 20,
+    height: 20,
+  },
+  bottomSpace: {
+    height: 400, // Puedes ajustar esta altura según sea necesario
+  },
+  cell: {
+    flex: 1,
+    textAlign: "center",
+  },
+  formContainer: {
+    width: "80%",
+    marginTop: 10,
+    marginBottom: 10,
+    backgroundColor: "white",
     padding: 20,
-    margin: 20,
-    borderRadius: 20,
+    borderRadius: 10,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -81,165 +144,32 @@ export default function Sales() {
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-  };
-
-  const showModal = useCallback(() => {
-    setModalContent("default");
-    setVisible(true);
-  }, []);
-
-  const hideModal = useCallback(() => setVisible(false), []);
-
-  const handleDelete = useCallback((index: number) => {
-    setRows((prevRows) => prevRows.filter((_, i) => i !== index));
-  }, []);
-
-  const handleQRPress = useCallback(() => {
-    setModalContent("qr");
-  }, []);
-
-  const handlePayment = useCallback(() => {
-    setModalContent("billing");
-  }, []);
-
-  const handleSearch = useCallback((query: string) => {
-    setSearchQuery(query);
-    setFilteredProducts(
-      query.trim()
-        ? productsMock.filter((product) => product.code.includes(query.trim()))
-        : productsMock
-    );
-  }, []);
-
-  const showInvoice = useCallback(() => {
-    setModalContent("billing");
-    setVisible(true);
-  }, []);
-
-  const renderRoute = useCallback(() => {
-    switch (route) {
-      case "sales":
-        return (
-          <DataList
-            columns={columns}
-            rows={rows}
-            onDelete={handleDelete}
-            route={route}
-          />
-        );
-      case "billing":
-        return (
-          <DataList
-            columns={["ID", "Fecha", "Monto"]}
-            rows={[
-              ["#18850", "8/11/2023", "$168.00"],
-              ["#18240", "8/11/2023", "$218.00"],
-              ["#15120", "6/11/2023", "$34.50"],
-              ["#13350", "6/11/2023", "$308.00"],
-              ["#14860", "3/11/2023", "$42.00"],
-              ["#17851", "26/10/2023", "$521.00"],
-            ]}
-            onFileIconPress={showInvoice}
-            route={route}
-          />
-        );
-      default:
-        return (
-          <DataList
-            columns={["Producto", "Cantidad", "Valor"]}
-            rows={rows}
-            onDelete={handleDelete}
-            route={route}
-          />
-        );
-    }
-  }, [route, rows, handleDelete]);
-
-  const ModalContent = ({
-    modalContent,
-    ...props
-  }: { modalContent: Content } & ModalContentProps) => {
-    switch (modalContent) {
-      case "default":
-        return <DefaultContent {...props} handleQRPress={handleQRPress} />;
-      case "qr":
-        return <QRContent {...props} />;
-      case "payment":
-        return <PaymentContent {...props} />;
-      case "cash_payment":
-        return <CashPaymentContent handlePayment={handlePayment} />;
-      case "card_payment":
-        return <CardPaymentContent />;
-      case "billing":
-        return <BillingContent />;
-      default:
-        return <DefaultContent {...props} handleQRPress={handleQRPress} />;
-    }
-  };
-
-  return (
-    <BlurView
-      intensity={visible ? 100 : 0}
-      style={{
-        flex: 1,
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        opacity: visible ? 0.1 : 1,
-      }}
-      tint="dark"
-    >
-      <Navbar logoShown iconRoute />
-      <View style={{ flexDirection: "row", justifyContent: "center", gap: 20 }}>
-        <Pressable
-          onPress={() => setRoute("sales")}
-          style={{
-            backgroundColor: route === "sales" ? "#243458" : "#0F172A",
-            padding: 10,
-            borderRadius: 10,
-          }}
-        >
-          <Text style={{ fontSize: 18, color: "white" }}>
-            {language === "es" ? "Ventas" : "Sales"}
-          </Text>
-        </Pressable>
-        <Pressable
-          onPress={() => setRoute("billing")}
-          style={{
-            backgroundColor: route === "billing" ? "#243458" : "#0F172A",
-            padding: 10,
-            borderRadius: 10,
-          }}
-        >
-          <Text style={{ fontSize: 18, color: "white" }}>
-            {language === "es" ? "Facturación" : "Billing"}
-          </Text>
-        </Pressable>
-      </View>
-      {renderRoute()}
-      <Portal>
-        <Modal
-          visible={visible}
-          onDismiss={hideModal}
-          contentContainerStyle={containerStyle}
-        >
-          <ModalContent
-            modalContent={modalContent}
-            setModalContent={setModalContent}
-            searchQuery={searchQuery}
-            handlePayment={handlePayment}
-            handleSearch={handleSearch}
-            filteredProducts={filteredProducts}
-            hideModal={hideModal}
-            handleQRPress={handleQRPress}
-          />
-        </Modal>
-      </Portal>
-      {route === "sales" && (
-        <Button mode="contained" textColor="#fff" onPress={showModal}>
-          {language === "es" ? "Realizar pago" : "Complete payment"}
-        </Button>
-      )}
-    </BlurView>
-  );
-}
+  },
+  tableHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: "#009688",
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  headerText: {
+    color: "white",
+    fontWeight: "bold",
+    flex: 1,
+    textAlign: "center",
+  },
+  input: {
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    color: "black",
+  },
+  scrollViewContent: {
+    flexGrow: 10,
+  },
+});
