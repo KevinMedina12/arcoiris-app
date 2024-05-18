@@ -4,7 +4,7 @@ module.exports = function(api) {
     presets: ['babel-preset-expo'],
     plugins: [
       // Required for expo-router
-      'expo-router/babel',
+   
     ],
     env: {
       production: {
@@ -13,3 +13,5 @@ module.exports = function(api) {
     },
   };
 };
+
+

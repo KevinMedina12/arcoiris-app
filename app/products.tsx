@@ -38,6 +38,7 @@ export default function StoragePage() {
   }, []);
 
   const deleteProduct = async (key: string) => {
+    console.log("ds",key)
     try {
       Alert.alert(
         "Confirmar eliminación",
@@ -74,7 +75,8 @@ export default function StoragePage() {
       console.log("Producto añadido con ID: ", newId);
   
       // Actualizar el estado con el nuevo producto
-      setItems([...items, { ...newProduct, key: newId }]);
+      setItems([...items, { ...newProduct, key: newId, id: docRef.id }]);
+      console.log("set",setItems)
       setNewProduct({
         key: newId + 1, // Incrementar el id para el próximo producto
         name: "",

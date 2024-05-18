@@ -15,11 +15,11 @@ export const GlassContainer: React.FC<Props> = ({ children }) => {
         alignItems: "center",
         gap: 20,
         borderRadius: 16,
-        backgroundColor: "rgb(255, 255, 255, 0.19)",
+        backgroundColor: "#0F172A",
         boxShadow: "0 4px 30px rgba(0,0,0,0.1)",
         backdropFilter: "blur(7px)",
-        height: '100%',
-        width: "100%",
+        height: '105%',
+        width: "112%",
         padding: 30,
       }}
     >{children}</View>

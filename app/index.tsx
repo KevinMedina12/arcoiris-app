@@ -15,6 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 import "firebase/auth";
 import { useLanguage } from "./context/LanguageProvider";
 import SwitchLanguage from "../components/SwitchLanguage";
+import './styles.css'; // Importa el archivo CSS
 
 type RootStackParamList = {
   Login: undefined;
@@ -82,13 +83,13 @@ function  LoginScreen({ navigation }: { navigation: LoginScreenNavigationProp })
    
     <Center p={30}>
       <SwitchLanguage />
-      <GlassContainer>
+      <GlassContainer >
         <Image
           source={require("../assets/images/arcoiris.png")}
           style={{ width: 160, height: 125 }}
         />
-        <View style={{ width: "100%" }}>
-          <TextInput
+        <View style={{ width: "100%" } }>
+          <TextInput  
             label={translations.emailPlaceholderText}
             mode="outlined"
             style={{ backgroundColor: "#fff" }}
@@ -127,4 +128,7 @@ return (
     <Stack.Screen name="Dashboard" component={DashboardScreen} />
     </Stack.Navigator>
 );
+
 }
+
+
